@@ -27,7 +27,7 @@ libcamera-jpeg -o Desktop/image.jpeg
 ```
 If using a version other than Bullseye, replace ```libcamera``` with ```raspistill```
 
-##Download requisite packages:
+## Download requisite packages:
 
 1) Make sure that opencv is installed on the system
 ```bash
