@@ -19,6 +19,3 @@ while True:
 	
 	cap.release()
 	cv2.destroyAllWindows()
-        
-    else:
-        print ("The door is secure")

@@ -1,7 +1,6 @@
 import digitalio
 import board
 from PIL import Image, ImageDraw
-from adafruit_rgb_display import ili9341
 from adafruit_rgb_display import st7735 
 
 cs_pin = digitalio.DigitalInOut(board.CE0)
@@ -18,7 +17,8 @@ spi = board.SPI()
 disp = st7735.ST7735R(spi, rotation=90, 
 					cs=cs_pin,
 					dc=dc_pin,
-					rst=reset_pin,
+					rst=reset_pin, 
+                    bgr=True, #TFT display correction (wired backward by default?)
 					baudrate=BAUDRATE) # 1.8" ST7735R
 
 # Turn on the Backlight
@@ -36,6 +36,7 @@ else:
     height = disp.height
 image = Image.new("RGB", (width, height))
 
+
 # Get drawing object to draw on image.
 draw = ImageDraw.Draw(image)
 
@@ -43,7 +44,9 @@ draw = ImageDraw.Draw(image)
 draw.rectangle((0, 0, width, height), outline=0, fill=(0, 0, 0))
 disp.image(image)
 
-image = Image.open("images/Paper.png")
+image = Image.open("images/oranges.jpeg")
+image.show()
+
 
 # Scale the image to the smaller screen dimension
 image_ratio = image.width / image.height
