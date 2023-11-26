@@ -36,70 +36,47 @@ train_datagen = ImageDataGenerator(
 val_datagen = ImageDataGenerator(rescale=1./255) #Validation data does not get augmented
       
 #Pull in training/verification data
-
-local_zip = '/tmp/archive.zip'
-zip_ref = zipfile.ZipFile(local_zip, 'r')
-zip_ref.extractall('/tmp')
-
-base_dir = '/tmp/Cars Dataset'
-train_dir = os.path.join(base_dir, 'train')
-validation_dir = os.path.join(base_dir, 'test')
+base_dir = 'images'
+train_dir = os.path.join(base_dir, 'ImageNet_Train')
+validation_dir = os.path.join(base_dir, 'ImageNet_Test')
 
 
 ##TRAINING
 #######################################
-#Audi train
-train_audi_dir = os.path.join(train_dir, 'Audi')
+#Can train
+train_can_dir = os.path.join(train_dir, 'cans')
 
-#Hyundai train
-train_hyundai_dir = os.path.join(train_dir, 'Hyundai Creta')
+#Paper train
+train_paper_dir = os.path.join(train_dir, 'paper')
 
-#Mahindra train
-train_mahindra_dir = os.path.join(train_dir, 'Mahindra Scorpio')
+#Glass train
+train_glass_dir = os.path.join(train_dir, 'glass')
 
-#Rolls Royce train
-train_rr_dir = os.path.join(train_dir, 'Rolls Royce')
+#Plastic train
+train_plastic_dir = os.path.join(train_dir, 'plastic')
 
-#Swift train
-train_swift_dir = os.path.join(train_dir, 'Swift')
-
-#Tata train
-train_tata_dir = os.path.join(train_dir, 'Tata Safari')
-
-#Toyota train
-train_toyota_dir = os.path.join(train_dir, 'Toyota Innova')
-
-train_audi_fnames = os.listdir(train_audi_dir)
+train_can_fnames = os.listdir(train_can_dir)
 #######################################
 
 ##TESTING
 #######################################
-#Audi test
-test_audi_dir = os.path.join(validation_dir, 'Audi')
+#Can test
+test_can_dir = os.path.join(validation_dir, 'cans')
 
-#Hyundai test
-test_hyundai_dir = os.path.join(validation_dir, 'Hyundai Creta')
+#Paper test
+test_paper_dir = os.path.join(validation_dir, 'paper')
 
-#Mahindra test
-test_mahindra_dir = os.path.join(validation_dir, 'Mahindra Creta')
+#Glass test
+test_glass_dir = os.path.join(validation_dir, 'glass')
 
-#Rolls Royce test
-test_rr_dir = os.path.join(validation_dir, 'Rolls Royce')
-
-#Swift test
-test_swift_dir = os.path.join(validation_dir, 'Swift')
-
-#Tata test
-test_tata_dir = os.path.join(validation_dir, 'Tata Safari')
-
-#Toyota test
-test_toyota_dir = os.path.join(validation_dir, 'Toyota Innova')
+#Plastic test
+test_plastic_dir = os.path.join(validation_dir, 'paper')
 
 #######################################
 
 ##Visualize datagen transformations on a subset of cars
 
-img_path = os.path.join(train_audi_dir, train_audi_fnames[2])
+img_path = os.path.join(train_can_dir, train_can_fnames[2])
 img = load_img(img_path, target_size=(150, 150))  # this is a PIL image
 x = img_to_array(img)  # Numpy array with shape (150, 150, 3)
 x = x.reshape((1,) + x.shape)  # Numpy array with shape (1, 150, 150, 3)
@@ -119,7 +96,7 @@ for batch in datagen.flow(x, batch_size=1):
 train_generator = train_datagen.flow_from_directory(
         train_dir,  # This is the source directory for training images
         target_size=(150, 150),  # All images will be resized to 150x150
-        batch_size=20,
+        batch_size=2,
         # Since we use categorical_crossentropy loss, we need categorical labels
         class_mode='categorical')
         
@@ -127,7 +104,7 @@ train_generator = train_datagen.flow_from_directory(
 validation_generator = val_datagen.flow_from_directory(
         validation_dir,
         target_size=(150, 150),
-        batch_size=20,
+        batch_size=2,
         class_mode='categorical')
         
 # Our input feature map is 150x150x3: 150x150 for the image pixels, and 3 for
@@ -171,10 +148,10 @@ model.compile(loss='categorical_crossentropy',
 
 history = model.fit_generator(
       train_generator,
-      steps_per_epoch=int(271/10),
-      epochs=60,
+      steps_per_epoch=int(8/2),
+      epochs=20,
       validation_data=validation_generator,
-      validation_steps=int(67/10),
+      validation_steps=int(4/2),
       verbose=2)
       
 
