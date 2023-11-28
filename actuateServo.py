@@ -2,53 +2,56 @@
 #what sort of recyling is being viewed
 #Import required libraries
 import RPi.GPIO as GPIO
-
-GPIO.setmode(GPIO.BOARD) #Interface via physical pin number
-
-pin = 12
-
-GPIO.setup(pin, GPIO.OUT) #Select pin 12 as an output since it has hardware support for PWM
-
-#Straight ahead is "Other." 
-#45* to the right is "Plastic"
-#45* to the left is "Paper
-#90* to the right is "Glass"
-#90* to the left is "Metal"
+import time
 
 def actuateServo(material):
+
+    GPIO.setmode(GPIO.BOARD) #Interface via physical pin number
+
+    pin = 12
+
+    GPIO.setup(pin, GPIO.OUT) #Select pin 12 as an output since it has hardware support for PWM
+
+    #Straight ahead is "Other." 
+    #45* to the left is "Plastic"
+    #45* to the right is "Paper
+    #90* to the left is "Glass"
+    #90* to the right is "Metal"
+
     if material == "plastic":
-        servoPos = GPIO.PWM(pin, 500) #Period of 2mS tells servo to move to 45* angle
-        servoPos.start(50) #Arbitrarily set PWM duty cycle to 50%
-        sleep(5) #Wait to make sure that the servo has moved to position
+        servoPos = GPIO.PWM(pin, 50) #Need total pulse length of 20mS
+        servoPos.start(10) #Duty cycle of 2 mS goes to -45*
+        time.sleep(1) #Wait to make sure that the servo has moved to position
         servoPos.stop() #Close the PWM connection
         GPIO.cleanup() #Close GPIO connection
 
     elif material == "paper":
-        servoPos = GPIO.PWM(pin, 1000) #Period of 1.5mS tells servo to move to -45* angle
-        servoPos.start(50) #Set PWM DC to 50%
-        sleep(5) #Wait 5 seconds to make sure servo has moved to position
+      #  print("Paper")
+        servoPos = GPIO.PWM(pin, 50) #Pulse width of 20mS
+        servoPos.start(5) #Duty cycle of 1 mS moves to 45* angle
+        time.sleep(1) #Wait 5 seconds to make sure servo has moved to position
         servoPos.stop() #Close PWM connection
         GPIO.cleanup() #Close GPIO connection
 
     elif material == "glass":
-        servoPos = GPIO.PWM(pin, 400) #Period of 2.5mS tells servo to go to 90* angle
-        servoPos.start(50) #Set PWM DC to 50%
-        sleep(5) #Wait 5 seconds to make sure the servo moved
+        servoPos = GPIO.PWM(pin, 50) #Pulse width of 20mS
+        servoPos.start(12.5) #Duty cycle of 2.5mS moves to -90* angle
+        time.sleep(1) #Wait 5 seconds to make sure the servo moved
         servoPos.stop() #Close PWM
         GPIO.cleanup() #CLose GPIO connection
 
     elif material == "metal":
-        servoPos = GPIO.PWM(pin, 2000) #Period tells servo to go to -90* angle
-        servoPos.start(50) #Set PWM to 50%
-        sleep(5) #Make sure servo moved
+        servoPos = GPIO.PWM(pin, 50) 
+        servoPos.start(2.5) #Go to 90* angle
+        time.sleep(1) #Make sure servo moved
         servoPos.stop() #Close PWM
         GPIO.cleanup() #Close GPIO connection
 
     else:
-        servoPos = GPIO.PWM(pin, 666.6) #Period of 1.5mS tells servo to go to 0* angle
-        servoPos.start(50) #Set PWM to 50%
-        sleep(5) #Make sure servo moved
+        servoPos = GPIO.PWM(pin, 50)
+        servoPos.start(7.5) #Go to 0* angle
+        time.sleep(1) #Make sure servo moved
         servoPos.stop() #Close PWM
         GPIO.cleanup() #Close GPIO connection
        
-GPIO.cleanup() #Make sure the GPIO is released
+#GPIO.cleanup() #Make sure the GPIO is released
