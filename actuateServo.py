@@ -6,7 +6,7 @@ import time
 
 def actuateServo(material):
 
-    GPIO.setmode(GPIO.BOARD) #Interface via physical pin number
+   # GPIO.setmode(GPIO.BOARD) #Interface via physical pin number
 
     pin = 12
 
