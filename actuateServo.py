@@ -6,9 +6,9 @@ import time
 
 def actuateServo(material):
 
-   # GPIO.setmode(GPIO.BOARD) #Interface via physical pin number
+    GPIO.setmode(GPIO.BCM) #Interface via physical pin number
 
-    pin = 12
+    pin = 21
 
     GPIO.setup(pin, GPIO.OUT) #Select pin 12 as an output since it has hardware support for PWM
 

@@ -5,7 +5,7 @@ from adafruit_rgb_display import st7735
 import RPi.GPIO as GPIO
 
 def operateTFT(matType):
-    paper = None
+    picture = None
     if matType == "paper":
         picture = "images/misc_im/Paper.png"
     elif matType == "plastic":
@@ -14,7 +14,7 @@ def operateTFT(matType):
         picture = "images/misc_im/ECE_471_Final_TFT_Display_Metal.jpg"
     else:
         picture = "images/misc_im/other-waste.jpg"
-    GPIO.setmode(GPIO.BOARD)
+    #GPIO.setmode(GPIO.BOARD)
     cs_pin = digitalio.DigitalInOut(board.CE0)
     dc_pin = digitalio.DigitalInOut(board.D25)
     reset_pin = digitalio.DigitalInOut(board.D24)

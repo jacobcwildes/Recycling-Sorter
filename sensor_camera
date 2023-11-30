@@ -3,10 +3,9 @@
 #Import requirements
 from actuateServo import actuateServo
 from tft import operateTFT
-import RPi.GPIO as GPIO
 
 # Import for proximity sensor 
-from proximitySensor import prox_sensor
+import RPi.GPIO as GPIO
 
 # Import for the camera
 from picamera2 import Picamera2
@@ -16,6 +15,13 @@ import os
 # GPIO pins
 
 
+# Proximity sensor
+GPIO.setmode(GPIO.BCM)
+GPIO.setwarnings(False)
+TRIG = 23
+ECHO = 24
+GPIO.setup(TRIG, GPIO.OUT)
+GPIO.setup(TRIG, GPIO.IN)
 
 # Camera
 
@@ -25,19 +31,21 @@ cap = Picamera2()
 #Pass some basic configurations
 cap.configure(cap.create_still_configuration(main={"format": "XRGB8888", "size": (640, 480)}))
 
-actuateServo("paper")
-
 while True:
-
-	distance = prox_sensor()
+	# Proximity sensor logic
+	GPIO.output(TRIG, True)
+	time.sleep(0.00001)
+	GPIO.output(TRIG, False)
+	while GPIO.input(ECHO) == 0:
+		pulse_start = time.time()
+	while GPIO.input(ECHO) == 1:
+		pulse_end = time.time()
+	pulse_duration = pulse_end - pulse_start
+	distance = pulse_duration * 17150
+	distance = round(distance,2) 	
+	
 	# We can change the proximity sensor reading distance here
 	if distance < 10:
-		
-		print("Recording will start")
-		#Recording audio			
-		cmd= "arecord -D hw:2,0 -d 5 -f cd ~/Desktop/471/project/test.wav -c 1"
-		os.system(cmd)
-		
 		# Camera logic here ------------------------
 		#Begin the stream
 		cap.start()
@@ -52,33 +60,20 @@ while True:
 				im = cap.capture_array()
 				cv.imshow("Frame", im)
 				if cv.waitKey(1) & 0xFF == ord('q'):
-					# Take a picture for segmentation purposes
 					cv.imwrite('images/c1.png', im)
 					cv.destroyAllWindows()
 					break
-		# Camera logic finishes here ------------------------
-		
-		
-		# Call the model for the image segmentation
-		
-		# Call the model for the audio recognition
-		
-		# Ensemble models
-		
-		# Print out the garbage material type
-		
-		# Show the corresponding label in TFT
-		#operateTFT(matType)
-		
-		# Turn the servo accordingly
-		#actuateServo(material)
-		
-		
-		
-		
-		
+					
+		cmd= "arecord -D hw:2,0 -d 5 -f cd ~/Desktop/471/project/test.wav -c 1"
+		os.system(cmd)
+
+		# Camera logic here ------------------------
 
 
+#Debug variable
+#material = "paper"
+#matType = "paper"
 
-
+#actuateServo(material)
+#operateTFT(matType)
 
