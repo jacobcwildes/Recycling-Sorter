@@ -37,14 +37,14 @@ model = Sequential([
 	Conv2D(64, (3, 3), activation='relu'),
 	MaxPooling2D((2, 2)),
 	
-	#Conv2D(128, (3, 3), activation='relu'),
-	#MaxPooling2D((2, 2)),
+	Conv2D(128, (3, 3), activation='relu'),
+	MaxPooling2D((2, 2)),
 	
-	#Conv2D(256, (3, 3), activation='relu'),
-	#MaxPooling2D((2, 2)),
+	Conv2D(256, (3, 3), activation='relu'),
+	MaxPooling2D((2, 2)),
 	
 	Flatten(),
-	Dense(128, activation='relu'),
+	Dense(512, activation='relu'),
 	Dropout(0.5), #Dropout rate of 0.5
 	
 	Dense(4, activation='softmax') #Output layer with 4 units for 4 different categories
@@ -67,14 +67,18 @@ train_generator = train_datagen.flow_from_directory(
 	train_dir,
 	target_size = (img_width, img_height),
 	batch_size = batch_size,
-	class_mode = 'categorical')
+	class_mode = 'categorical',
+        classes = ['cans', 'plastic', 'paper', 'glass'],
+        )
 	
 validation_datagen = tf.keras.preprocessing.image.ImageDataGenerator(rescale=1./255)
 validation_generator = validation_datagen.flow_from_directory(
 	validation_dir,
 	target_size = (img_width, img_height),
 	batch_size = batch_size,
-	class_mode = 'categorical')
+	class_mode = 'categorical',
+        classes = ['cans', 'plastic', 'paper', 'glass'],
+        )
 	
 #Train the model
 history = model.fit(
