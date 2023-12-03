@@ -14,7 +14,8 @@ def operateTFT(matType):
         picture = "images/misc_im/ECE_471_Final_TFT_Display_Metal.jpg"
     else:
         picture = "images/misc_im/other-waste.jpg"
-    #GPIO.setmode(GPIO.BOARD)
+	
+    GPIO.setmode(GPIO.BCM)
     cs_pin = digitalio.DigitalInOut(board.CE0)
     dc_pin = digitalio.DigitalInOut(board.D25)
     reset_pin = digitalio.DigitalInOut(board.D24)
@@ -22,6 +23,9 @@ def operateTFT(matType):
     # Config for display baudrate (default max is 24mhz):
     BAUDRATE = 24000000
     
+    
+    
+
     # Setup SPI bus using hardware SPI:
     spi = board.SPI()
 
@@ -65,7 +69,7 @@ def operateTFT(matType):
     disp.image(image)
 
     image = Image.open(picture)
-    image.show()
+    #image.show()
 
 
     # Scale the image to the smaller screen dimension
@@ -86,3 +90,5 @@ def operateTFT(matType):
 
     # Display image.
     disp.image(image)
+
+
